@@ -30,7 +30,7 @@ EPUBJS.Reader = function(path, _options) {
 	var reader = this;
 	var book;
 	var plugin;
-	
+
 	this.settings = _.defaults(_options || {}, {
 		restore : true,
 		reload : false,
@@ -39,9 +39,9 @@ EPUBJS.Reader = function(path, _options) {
 		bookKey : null,
 		styles : null
 	});
-	
+
 	this.setBookKey(path); //-- This could be username + path or any unique string
-	
+
 	if(this.settings.restore && this.isSaved()) {
 		this.applySavedSettings();
 	}
@@ -49,20 +49,22 @@ EPUBJS.Reader = function(path, _options) {
 	this.settings.styles = this.settings.styles || {
 		fontSize : "100%"
 	};
-	
+
 	this.book = book = new EPUBJS.Book({
 		bookPath: path,
 		restore: this.settings.restore,
 		reload: this.settings.reload,
 		contained: this.settings.contained,
 		bookKey: this.settings.bookKey,
-		styles: this.settings.styles
+		styles: this.settings.styles,
+    fixedLayout: true,
+    spreads:false
 	});
-	
+
 	if(this.settings.previousLocationCfi) {
 		book.gotoCfi(this.settings.previousLocationCfi);
 	}
-	
+
 	this.offline = false;
 	this.sidebarOpen = false;
 	if(!this.settings.bookmarks) {
@@ -70,20 +72,20 @@ EPUBJS.Reader = function(path, _options) {
 	}
 
 	book.renderTo("viewer");
-	
+
 	reader.ReaderController = EPUBJS.reader.ReaderController.call(reader, book);
 	reader.SettingsController = EPUBJS.reader.SettingsController.call(reader, book);
 	reader.ControlsController = EPUBJS.reader.ControlsController.call(reader, book);
 	reader.SidebarController = EPUBJS.reader.SidebarController.call(reader, book);
 	reader.BookmarksController = EPUBJS.reader.BookmarksController.call(reader, book);
-	
+
 	// Call Plugins
 	for(plugin in EPUBJS.reader.plugins) {
 		if(EPUBJS.reader.plugins.hasOwnProperty(plugin)) {
 			reader[plugin] = EPUBJS.reader.plugins[plugin].call(reader, book);
 		}
 	}
-	
+
 	book.ready.all.then(function() {
 		reader.ReaderController.hideLoader();
 	});
@@ -95,11 +97,11 @@ EPUBJS.Reader = function(path, _options) {
 	book.getToc().then(function(toc) {
 		reader.TocController = EPUBJS.reader.TocController.call(reader, toc);
 	});
-	
+
 	window.addEventListener("beforeunload", this.unload.bind(this), false);
-	
+
 	document.addEventListener('keydown', this.adjustFontSize.bind(this), false);
-	
+
 	book.on("renderer:keydown", this.adjustFontSize.bind(this));
 	book.on("renderer:keydown", reader.ReaderController.arrowKeys.bind(this));
 
@@ -113,19 +115,19 @@ EPUBJS.Reader.prototype.adjustFontSize = function(e) {
 	var MINUS = 189;
 	var ZERO = 48;
 	var MOD = (e.ctrlKey || e.metaKey );
-	
+
 	if(!this.settings.styles) return;
-	
+
 	if(!this.settings.styles.fontSize) {
 		this.settings.styles.fontSize = "100%";
 	}
-	
+
 	fontSize = parseInt(this.settings.styles.fontSize.slice(0, -1));
 
 	if(MOD && e.keyCode == PLUS) {
 		e.preventDefault();
 		this.book.setStyle("fontSize", (fontSize + interval) + "%");
-		
+
 	}
 
 	if(MOD && e.keyCode == MINUS){
@@ -133,7 +135,7 @@ EPUBJS.Reader.prototype.adjustFontSize = function(e) {
 		e.preventDefault();
 		this.book.setStyle("fontSize", (fontSize - interval) + "%");
 	}
-	
+
 	if(MOD && e.keyCode == ZERO){
 		e.preventDefault();
 		this.book.setStyle("fontSize", "100%");
@@ -145,22 +147,22 @@ EPUBJS.Reader.prototype.addBookmark = function(cfi) {
 	if(present > -1 ) return;
 
 	this.settings.bookmarks.push(cfi);
-	
+
 	this.trigger("reader:bookmarked", cfi);
 };
 
 EPUBJS.Reader.prototype.removeBookmark = function(cfi) {
 	var bookmark = this.isBookmarked(cfi);
 	if( bookmark === -1 ) return;
-	
+
 	delete this.settings.bookmarks[bookmark];
-	
+
 	this.trigger("reader:unbookmarked", bookmark);
 };
 
 EPUBJS.Reader.prototype.isBookmarked = function(cfi) {
 	var bookmarks = this.settings.bookmarks;
-	
+
 	return bookmarks.indexOf(cfi);
 };
 
@@ -169,7 +171,7 @@ EPUBJS.Reader.prototype.searchBookmarked = function(cfi) {
 	var bookmarks = this.settings.bookmarks,
 			len = bookmarks.length,
 			i;
-	
+
 	for(i = 0; i < len; i++) {
 		if (bookmarks[i]['cfi'] === cfi) return i;
 	}
@@ -207,7 +209,7 @@ EPUBJS.Reader.prototype.removeSavedSettings = function() {
 
 EPUBJS.Reader.prototype.applySavedSettings = function() {
 		var stored = JSON.parse(localStorage.getItem(this.settings.bookKey));
-		
+
 		if(stored) {
 			this.settings = _.defaults(this.settings, stored);
 			return true;

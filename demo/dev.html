@@ -11,38 +11,38 @@
         <link rel="stylesheet" href="../demo/css/normalize.css">
         <link rel="stylesheet" href="../demo/css/main.css">
         <link rel="stylesheet" href="../demo/css/popup.css">
-        <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script> 
+        <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="epubjs/libs/jquery-1.9.0.min.js"><\/script>')</script>
         -->
         <script src="../libs/jquery/jquery-2.0.3.js"></script>
 
         <script>
             "use strict";
-            
-            document.onreadystatechange = function () {  
+
+            document.onreadystatechange = function () {
               if (document.readyState == "complete") {
                 EPUBJS.VERSION = "0.1.7";
-                
+
                 EPUBJS.filePath = "js/libs/";
                 EPUBJS.cssPath = "css/";
                 // fileStorage.filePath = EPUBJS.filePath;
 
-                window.Reader = ePubReader("moby-dick/", { reload: true });
-              }  
+                window.Reader = ePubReader("moby-dick/", { reload: false });
+              }
             };
-        
+
           </script>
-        
+
         <!--<script async src="epubjs/libs/jquery.touchy.min.js"></script>-->
-        
+
         <!-- zip -->
         <script src="../libs/zip/zip.js"></script>
         <script src="../libs/zip/zip-fs.js"></script>
         <script src="../libs/zip/zip-ext.js"></script>
         <script src="../libs/zip/inflate.js"></script>
         <script src="../libs/zip/mime-types.js"></script>
-        
-        
+
+
         <!-- Render -->
         <script src="../libs/underscore/underscore.js"></script>
         <script src="../libs/rsvp/rsvp.js"></script>
@@ -58,13 +58,13 @@
         <script src="../src/renderer.js"></script>
         <script src="../src/replace.js"></script>
         <script src="../src/epubcfi.js"></script>
-        
+
         <!-- Hooks -->
         <script async src="../hooks/default/transculsions.js"></script>
         <script async src="../hooks/default/endnotes.js"></script>
         <script async src="../hooks/default/smartimages.js"></script>
 
-        
+
         <!-- Reader -->
         <script src="../reader/reader.js"></script>
         <script src="../reader/controllers/bookmarks_controller.js"></script>
@@ -74,25 +74,25 @@
         <script src="../reader/controllers/settings_controller.js"></script>
         <script src="../reader/controllers/sidebar_controller.js"></script>
         <script src="../reader/controllers/toc_controller.js"></script>
-        
+
         <!-- Full Screen -->
         <script src="js/libs/screenfull.min.js"></script>
-        
+
         <!-- Highlights -->
         <script src="js/libs/jquery.highlight.js"></script>
         <script async src="../hooks/extensions/highlight.js"></script>
-        
+
     </head>
     <body>
       <div id="sidebar">
         <div id="panels">
           <input id="searchBox" placeholder="search" type="search">
-          
+
           <a id="show-Search" class="show_view icon-search" data-view="Search">Search</a>
           <a id="show-Toc" class="show_view icon-list-1 active" data-view="Toc">TOC</a>
           <a id="show-Bookmarks" class="show_view icon-bookmark" data-view="Bookmarks">Bookmarks</a>
           <a id="show-Notes" class="show_view icon-edit" data-view="Notes">Notes</a>
-         
+
         </div>
         <div id="tocView">
         </div>
@@ -104,7 +104,7 @@
         </div>
       </div>
       <div id="main">
-        
+
         <div id="titlebar">
           <div id="opener">
             <a id="slider" class="icon-menu">Menu</a>
@@ -120,12 +120,12 @@
             <a id="fullscreen" class="icon-resize-full">Fullscreen</a>
           </div>
         </div>
-        
+
         <div id="divider"></div>
         <div id="prev" class="arrow">‹</div>
         <div id="viewer"></div>
         <div id="next" class="arrow">›</div>
-        
+
         <div id="loader"><img src="img/loader.gif"></div>
       </div>
       <div class="modal md-effect-1" id="settings-modal">

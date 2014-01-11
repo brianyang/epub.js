@@ -3,7 +3,7 @@ EPUBJS.EpubCFI = function(cfiStr){
 };
 
 EPUBJS.EpubCFI.prototype.generateChapter = function(_spineNodeIndex, _pos, id) {
-	
+
 	var pos = parseInt(_pos),
 		spineNodeIndex = _spineNodeIndex + 1,
 		cfi = '/'+spineNodeIndex+'/';
@@ -32,9 +32,9 @@ EPUBJS.EpubCFI.prototype.generateFragment = function(element, chapter) {
 			part.id.slice(0, 6) != "EPUBJS") { //-- ignore internal @EPUBJS ids
 
 			segment += "[" + part.id + "]";
-			 
+
 		}
-		
+
 		parts.push(segment);
 	});
 
@@ -54,10 +54,10 @@ EPUBJS.EpubCFI.prototype.pathTo = function(node) {
 			'tagName' : node.tagName,
 			'index' : children ? Array.prototype.indexOf.call(children, node) : 0
 		});
-		
+
 		node = node.parentNode;
 	}
-	
+
 	return stack;
 };
 
@@ -92,13 +92,13 @@ EPUBJS.EpubCFI.prototype.parse = function(cfiStr) {
 		text;
 
 	cfi.chapter = this.getChapter(cfiStr);
-	
+
 	chapSegment = parseInt(cfi.chapter.split("/")[2]) || false;
-	
+
 	cfi.fragment = this.getFragment(cfiStr);
 
 	if(!chapSegment || !cfi.fragment) return {spinePos: -1};
-	
+
 	cfi.spinePos = (parseInt(chapSegment) / 2 - 1 ) || 0;
 
 	chapId = cfi.chapter.match(/\[(.*)\]/);
@@ -119,24 +119,24 @@ EPUBJS.EpubCFI.prototype.parse = function(cfiStr) {
 
 	path.forEach(function(part){
 		var index, has_id, id;
-		
+
 		if(!part) return;
-		
+
 		index = parseInt(part) / 2 - 1;
 		has_id = part.match(/\[(.*)\]/);
-			
+
 
 		if(has_id && has_id[1]){
 			id = has_id[1];
 		}
-		
+
 		cfi.sections.push({
 			'index' : index,
 			'id' : id || false
 		});
-		
+
 	});
-	
+
 	return cfi;
 };
 
@@ -151,8 +151,8 @@ EPUBJS.EpubCFI.prototype.getElement = function(cfi, _doc) {
 
 	// sections.shift(); //-- html
 
-	while(sections.length > 0) {
-	
+	while(sections && sections.length > 0) {
+
 		part = sections.shift();
 
 		if(part.id){
@@ -160,18 +160,18 @@ EPUBJS.EpubCFI.prototype.getElement = function(cfi, _doc) {
 			element = doc.getElementById(part.id);
 
 		}else{
-	
+
 			element = children[part.index];
 
 			if(!children) console.error("No Kids", element);
-	
+
 		}
-	
-	
+
+
 		if(!element) console.error("No Element For", part);
 		children = Array.prototype.slice.call(element.children);
 	}
-	
+
 	return element;
 };
 

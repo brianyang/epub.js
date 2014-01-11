@@ -20,14 +20,15 @@ body {
   width: 100%;
   height: 100%;
   right: 0;
-  /* left: 40px; */ 
+  /* left: 40px; */
 /*   -webkit-transform: translate(40px, 0);
   -moz-transform: translate(40px, 0); */
-    
+
   /* border-radius: 5px 0px 0px 5px; */
   border-radius: 5px;
   background: #fff;
   overflow: hidden;
+  overflow:scroll;
   -webkit-transition: -webkit-transform .5s, width .5s;
   -moz-transition: -webkit-transform .5s, width .5s;
 
@@ -70,7 +71,7 @@ body {
 
 #titlebar a::before {
   visibility: visible;
-}  
+}
 
 #titlebar a:hover {
   opacity: .8;
@@ -97,12 +98,14 @@ body {
 
 #viewer {
   width: 80%;
-  height: 80%;
   /* margin-left: 10%; */
   margin: 0 auto;
   max-width: 1250px;
   /* z-index: 2;
   position: absolute; */
+  position:absolute;
+  overflow:scroll;
+  height: 100%;
 }
 
 #viewer iframe {
@@ -113,8 +116,18 @@ body {
   left: 40px;
 }
 
-#next {  
+#next {
   right: 40px;
+}
+#next, #prev{
+  display:none;
+}
+#titlebar{
+  position: fixed;
+  background: #fff;
+  height: 20px;
+  width: 100%;
+  opacity: 1;
 }
 
 .arrow {
@@ -131,7 +144,7 @@ body {
 .arrow:hover {
   color: #777;
 }
- 
+
 .arrow:active,
 .arrow.active {
   color: #000;
@@ -149,7 +162,7 @@ body {
   height: 100%;
   -webkit-transition: -webkit-transform .5s;
   -moz-transition: -moz-transform .5s;
-  
+
   overflow: hidden;
 }
 
@@ -234,7 +247,7 @@ body {
   float: left;
   margin-left: 10px;
   margin-top: -1px;
-  /* 
+  /*
   border-radius: 5px;
   background: #9b9b9b;
   float: left;
@@ -244,7 +257,7 @@ body {
   color: #000;
   border: none;
   outline: none; */
-  
+
 }
 
 input::-webkit-input-placeholder {
@@ -310,7 +323,7 @@ input:-moz-placeholder {
   display: block;
 }
 
-#tocView li, 
+#tocView li,
 #bookmarksView li {
   margin-bottom:10px;
   width: 225px;
@@ -466,13 +479,13 @@ input:-moz-placeholder {
   left: 50%;
   width: 50%;
   width: 630px;
-  
+
   height: auto;
   z-index: 2000;
   visibility: hidden;
   margin-left: -320px;
   margin-top: -160px;
- 
+
 }
 
 .overlay {
@@ -581,7 +594,7 @@ input:-moz-placeholder {
     width: 50%;
     margin-left: 25%;
   }
-  
+
   #divider,
   #divider.show {
     display: none;
@@ -597,8 +610,8 @@ input:-moz-placeholder {
   #prev {
     left: 20px;
   }
-  
-  #next {  
+
+  #next {
     right: 20px;
   }
 }
@@ -608,51 +621,51 @@ input:-moz-placeholder {
     width: 80%;
     margin-left: 10%;
   }
-  
+
   #prev {
     left: 0;
   }
-  
-  #next {  
+
+  #next {
     right: 0;
   }
-  
+
   .arrow {
     height: 100%;
     top: 45px;
     width: 10%;
     text-indent: -10000px;
   }
-  
+
   #main {
     -webkit-transform: translate(0, 0);
     -moz-transform: translate(0, 0);
     -webkit-transition: -webkit-transform .3s;
     -moz-transition: -moz-transform .3s;
   }
-  
+
   #main.closed {
     -webkit-transform: translate(260px, 0);
     -moz-transform: translate(260px, 0);
   }
-  
+
   #titlebar {
     /* font-size: 16px; */
     /* margin: 0 50px 0 50px; */
   }
-  
+
   #metainfo {
     font-size: 10px;
   }
-  
+
   #tocView {
     width: 260px;
   }
-  
+
   #tocView li {
     font-size: 12px;
   }
-  
+
   #tocView > ul{
     padding-left: 10px;
     webkit-padding-start:;
@@ -664,23 +677,23 @@ input:-moz-placeholder {
    font-style: normal;
    font-weight: normal;
    speak: none;
- 
+
    display: inline-block;
    text-decoration: inherit;
    width: 1em;
    margin-right: .2em;
    text-align: center;
    /* opacity: .8; */
- 
+
    /* For safety - reset parent styles, that can break glyph codes*/
    font-variant: normal;
    text-transform: none;
- 
+
    /* you can be more comfortable with increased icons size */
    font-size: 112%;
  }
- 
- 
+
+
 .icon-search:before { content: '\e807'; } /* '' */
 .icon-resize-full-1:before { content: '\e804'; } /* '' */
 .icon-cancel-circled2:before { content: '\e80f'; } /* '' */
