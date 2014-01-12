@@ -98,8 +98,8 @@ body {
 
 #viewer {
   width: 80%;
-  /* margin-left: 10%; */
   margin: 0 auto;
+  margin-left: 10%;
   max-width: 1250px;
   /* z-index: 2;
   position: absolute; */
