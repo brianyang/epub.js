@@ -362,12 +362,12 @@ font-style: italic;
 
 
 @media all and (orientation:portrait) {
-p { font-family: serif; }
+p { font-family: georgia; }
 }
 
 
 @media all and (orientation:landscape) {
-p { font-family: sans-serif; }
+p { font-family: georgia; }
 
 }
 
