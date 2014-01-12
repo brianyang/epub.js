@@ -25,7 +25,7 @@ function listen(port) {
 
 		if(!logger) server.use(connect.logger(logger))
 
-		server.listen(port);
+		server.listen(process.env.PORT || port);
 
 	log('Starting up Server, serving '.yellow
 		+ __dirname.green
