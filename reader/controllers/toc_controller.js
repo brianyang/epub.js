@@ -106,7 +106,62 @@ EPUBJS.reader.TocController = function(toc) {
 			}
 			event.preventDefault();
 	});
+	
+	var $nav = $("#navigation");
+	var $line = $("#line");
+	var height = $(window).height() - 100;
+	
+	var limitedToc = toc.slice(0, 50);
+	var dotHeight = (height - 150) / limitedToc.length;
+	$nav.height(height);
+	
+	limitedToc.forEach(function(chapter){
+		var $item = $("<li>");
+		var $link = $("<a>");
+		var $dot = $("<span>");
+		var $text = $("<span>");
+		$item.css("height", dotHeight + "px");
+		$dot.addClass("dot");
+		$text.addClass("hover-text");
+		$link.attr("id", "dot-"+chapter.id);
+		$link.attr('href', chapter.href);
+		$text.text(chapter.label);
+		
+		$link.append($dot);
+		$link.append($text);
+		$item.append($link);
+		$nav.append($item);
+	});
+	
+	$nav.find("a").on("click", function(event){
+			var url = this.getAttribute('href');
+	
+			//-- Provide the Book with the url to show
+			//   The Url must be found in the books manifest
+			book.goto(url);
+	
+			$nav.find(".active")
+					.removeClass("active");
+	
+			$(this).parent('li').addClass("active");
+	
+			event.preventDefault();
+	});
+	
+	var chapterChangeTwo = function(e) {
+		var id = e.id,
+				$item = $("#dot-toc-"+id),
+				$current = $nav.find(".active"),
+				$open = $nav.find('.active');
 
+		// if($item.length){
+			console.log(id, $item.parents('li'))
+			$item.parents('li').addClass("active");
+		// }	  
+	};
+	
+	book.on('renderer:chapterDisplayed', chapterChangeTwo);
+	
 	return {
 		"show" : onShow,
 		"hide" : onHide
