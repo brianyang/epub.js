@@ -1,7 +1,7 @@
 {
   "name": "EpubJS",
   "version": "0.1.8",
-  "repository": "https://github.com/futurepress/epub.js",
+  "repository": "https://github.com/brianyang/epub.js",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-connect": "~0.3.0",
