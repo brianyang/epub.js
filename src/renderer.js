@@ -68,8 +68,11 @@ EPUBJS.Renderer.prototype.scrollMonitor = function scrollMonitor(){
     	while (prevSib && i< 100){
     		var sibRect = prevSib.getBoundingClientRect();
     		if (sibRect.bottom<0){
+    			var curHeight = this.el.scrollHeight;
+    			var curHeight = this.el.scrollX;
+          log(curHeight)
     			this.el.removeChild(prevSib);
-    			this.el.scrollTop=this.el.scrollTop+sibRect.height;
+    			this.el.scrollTop = sibRect.height;
     		}
     		prevSib = prevSib.previousSibling;
     		i++;
