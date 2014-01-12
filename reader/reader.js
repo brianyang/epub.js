@@ -64,6 +64,7 @@ EPUBJS.Reader = function(path, _options) {
 	if(this.settings.previousLocationCfi) {
 		book.gotoCfi(this.settings.previousLocationCfi);
 	}
+  book.goto('chapter_001.xhtml')
 
 	this.offline = false;
 	this.sidebarOpen = false;

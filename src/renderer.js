@@ -26,18 +26,9 @@ EPUBJS.Renderer = function(book) {
 
 //-- Build up any html needed
 EPUBJS.Renderer.prototype.initialize = function(){
-  this.iframes = [];
-  this.iframes.push(document.createElement('iframe'));
-	this.iframes.push(document.createElement('iframe'));
-	this.iframes.push(document.createElement('iframe'));
-  this.iframe = this.iframes[1];
-	// this.iframe.id = "epubjs-iframe";
-	// this.nextIframe.id = "epubjs-nextIframe";
-	// this.prevIframe.id = "epubjs-prevIframe";
-	// this.iframe.scrolling = "no";
-	// this.nextIframe.scrolling = "no";
-	// this.prevIframe.scrolling = "no";
 
+
+	this.iframe = this.el.appendChild(document.createElement('iframe'));
 	if(this.book.settings.width || this.book.settings.height){
 		this.resizeIframe(this.book.settings.width || this.el.clientWidth, this.book.settings.height || this.el.clientHeight);
 	} else {
@@ -46,33 +37,43 @@ EPUBJS.Renderer.prototype.initialize = function(){
 
 		// this.on("renderer:resized", this.resizeIframe, this);
 	}
+    $(this.el).on("scroll", this.scrollMonitor.bind(this))
+    this.loadingFrame = false;
 
-	this.el.appendChild(this.iframes[0]);
-	this.el.appendChild(this.iframes[1]);
-	this.el.appendChild(this.iframes[2]);
 };
 
-
 EPUBJS.Renderer.prototype.scrollMonitor = function scrollMonitor(){
-    var diffHeight = window.innerHeight - this.iframes[2].getBoundingClientRect().top
-    if (diffHeight > -100){
-      $(this.el).off('scroll')
+	var diffHeight = window.innerHeight - this.iframe.getBoundingClientRect().bottom;
+    if (diffHeight > -100 && !this.loadingFrame){
+    	this.loadingFrame = true;
+      log('New Frame');
       log(EPUBJS.Book.Spine)
-      var next = new EPUBJS.Chapter(this.book.spine[this.book.spinePos + 1])
-      next.url(false).then(
-      function(url){
-        $('iframe').eq(2).attr('src', url)
-        $('iframe').eq(2).width($('iframe').eq(1).width())
-        // this.setIframeSrc(url, this.iframes[2]);
+      this.book.nextChap = new EPUBJS.Chapter(this.book.spine[this.book.spinePos + 1]);
 
-        var iframe = $('iframe').eq(2)[0]
-        iframe.onload = function(){
-          var iframeContentHeight = $('iframe').eq(2)[0].contentDocument.documentElement.scrollHeight;
-          log($('iframe').eq(2)[0])
-          log(iframeContentHeight)
-          $('iframe').eq(2).height(iframeContentHeight);
-        }
-      }.bind(this))
+	  var nextFrame = this.el.appendChild(document.createElement('iframe'));
+      this.book.nextChap.url(false).then(
+      function(url){
+		  this.prevFrame = this.iframe;
+	      this.iframe = nextFrame;
+        this.setIframeSrc(url, nextFrame);
+    	this.book.spinePos = this.book.spinePos+1;
+    	this.book.chapter = this.book.nextChap
+    	this.book.nextChap = null;
+    	this.loadingFrame = false;
+	  }.bind(this))
+    }
+    if (this.iframe.previousSibling){
+    	var prevSib = this.iframe.previousSibling;
+    	var i = 0;
+    	while (prevSib && i< 100){
+    		var sibRect = prevSib.getBoundingClientRect();
+    		if (sibRect.bottom<0){
+    			this.el.removeChild(prevSib);
+    			this.el.scrollTop=this.el.scrollTop+sibRect.height;
+    		}
+    		prevSib = prevSib.previousSibling;
+    		i++;
+    	}
     }
 }
 
@@ -267,16 +268,15 @@ EPUBJS.Renderer.prototype.setIframeSrc = function(url, _iframe){
 
   log(url)
 	var renderer = this,
-      iframe = _iframe || this.iframes[1],
+      iframe = _iframe || this.iframe,
   		deferred = new RSVP.defer();
 
-	this.visible(false);
+//	this.visible(false);
 
 	// this.iframe.src = url;
 	iframe.src = url;
 
   iframe.onload = function() {
-    $(renderer.el).on("scroll", EPUBJS.Renderer.prototype.scrollMonitor.bind(renderer))
 		renderer.doc = iframe.contentDocument;
 		renderer.docEl = renderer.doc.documentElement;
 		renderer.bodyEl = renderer.doc.body;
@@ -311,9 +311,9 @@ EPUBJS.Renderer.prototype.setIframeSrc = function(url, _iframe){
 
 		});
 
-		renderer.contentWindow.addEventListener("resize", renderer.onResized.bind(renderer), false);
-		var iframeContentHeight = renderer.docEl.scrollHeight;
-    iframe.height = iframeContentHeight;
+	//	renderer.contentWindow.addEventListener("resize", renderer.onResized.bind(renderer), false);
+ 	  	iframe.width="100%";
+    	iframe.height = renderer.docEl.getBoundingClientRect().height;
 		renderer.addIframeListeners();
 		renderer.addSelectionListeners();
 	};
@@ -811,3 +811,4 @@ EPUBJS.Renderer.prototype.remove = function() {
 
 //-- Enable binding events to Renderer
 RSVP.EventTarget.mixin(EPUBJS.Renderer.prototype);
+
