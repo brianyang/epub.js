@@ -1,6 +1,13 @@
 Epub.js
 ================================
 
+Continuous Scroll
+=================
+
+This fork implemented at the Open Book Hack 2014, at the NYPL, implements continuous scroll in with a non-paginated interface.
+
+
+
 ![FuturePress Views](http://fchasen.com/futurepress/fp.png)
 
 Epub.js is a JavaScript library for rendering ePub documents in the browser, across many devices.
@@ -17,7 +24,7 @@ Why EPUB
 
 The [EPUB standard](http://www.idpf.org/epub/30/spec/epub30-overview.html) is a widely used and easily convertible format.  Many books are currently in this format, and it is convertible to many other formats (such as PDF, Mobi and iBooks).
 
-An unzipped ePUB3 is a collection of HTML5 files, CSS, images and other media – just like any other website.  However, it enforces a schema of book components, which allows us to render a book and its parts based on a controlled vocabulary.  
+An unzipped ePUB3 is a collection of HTML5 files, CSS, images and other media – just like any other website.  However, it enforces a schema of book components, which allows us to render a book and its parts based on a controlled vocabulary.
 
 More specifically, the ePUB schema standardizes the table of contents, provides a manifest that enables the caching of the entire book, and separates the storage of the content from how it’s displayed.
 
@@ -36,7 +43,7 @@ Also make sure to set ```EPUBJS.filePath``` to the directory containing ```infla
 
 ```html
 <!-- Zip JS -->
-<script src="/build/libs/zip.min.js"></script>  
+<script src="/build/libs/zip.min.js"></script>
 
 <script>
     EPUBJS.filePath = "../build/libs/";
@@ -69,7 +76,7 @@ Recent Updates
 -------------------------
 + ```book.goto()``` and ```book.gotoCfi()``` can be called before ```book.renderTo()``` to start rendering at a previous page location.
 
-+ Moved page position restoring from local storage out of main library and into the demo reader. 
++ Moved page position restoring from local storage out of main library and into the demo reader.
 
 + Rewritten [Demo Reader](http://futurepress.github.com/epub.js/demo/)
 
@@ -146,16 +153,16 @@ Example hook:
 
 ```javascript
 EPBUJS.Hooks.register("beforeChapterDisplay").example = function(callback, render){
-    
+
     var elements = render.doc.querySelectorAll('[video]'),
         items = Array.prototype.slice.call(elements);
-    
+
     items.forEach(function(item){
       //-- do something with the video item
     }
-    
+
     if(callback) callback();
-		
+
 }
 ```
 
@@ -173,5 +180,5 @@ Follow us on twitter: @Epubjs
 Other
 -------------------------
 
-EPUB is a registered trademark of the [IDPF](http://idpf.org/). 
+EPUB is a registered trademark of the [IDPF](http://idpf.org/).
 
