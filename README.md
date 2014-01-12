@@ -2,6 +2,7 @@ Epub.js with Continuous Scroll
 ================================
 
 This fork implemented at the Open Book Hack 2014, at the NYPL, implements continuous scroll in with a non-paginated interface.
+![OpenBook](//openbook2014.herokuapp.com)
 
 ----
 ----
