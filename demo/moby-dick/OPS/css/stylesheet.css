@@ -366,9 +366,9 @@ p { font-family: georgia; }
 }
 
 
-/*@media all and (orientation:landscape) {
-p { font-family: sans-serif; }
+@media all and (orientation:landscape) {
+p { font-family: georgia; }
 
-}*/
+}
 
 
